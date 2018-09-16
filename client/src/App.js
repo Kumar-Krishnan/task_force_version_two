@@ -3,6 +3,8 @@ import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom
 import SignUpLogin from './components/SignUpLogIn'
 import PostsList from './components/PostsList'
 import axios from 'axios'
+import {saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
+
 
 class App extends Component {
   state = {
@@ -12,17 +14,21 @@ class App extends Component {
 
   async componentWillMount() {
     try {
-        let posts = []
-        if (this.state.signedIn) {
-            posts = await this.getPosts()
-        }
+      const signedIn = userIsLoggedIn()
 
-        this.setState({
-            posts
-        })
-    } catch (error) {
-      console.log(error);
-    }
+      let posts = []
+      if (signedIn) {
+          setAxiosDefaults()
+          posts = await this.getPosts()
+      }
+
+      this.setState({
+          posts,
+          signedIn,
+      })
+      } catch(error) {
+          console.log(error)
+      }
   }
   
 
@@ -44,6 +50,8 @@ class App extends Component {
         password: password,
         password_confirmation: password_confirmation
       }
+      const response = await axios.post('/auth', payload)
+      saveAuthTokens(response.headers)
 
       await axios.post('/auth', payload)
 
@@ -60,8 +68,10 @@ class App extends Component {
         email,
         password
       }
-
+      const response = await axios.post('/auth/sign_in', payload)
+      saveAuthTokens(response.headers)
       await axios.post('/auth/sign_in',payload)
+
 
       this.setState({signedIn: true})
     } catch (error){
