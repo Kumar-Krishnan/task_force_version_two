@@ -3,26 +3,28 @@ import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom
 import SignUpLogin from './components/SignUpLogIn'
 import axios from 'axios'
 import {clearAuthTokens, saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
+import Profile from './components/profile/Profile';
 
 
 class App extends Component {
   state = {
     signedIn: false,
-    posts: []
+    skills: []
   }
 
   async componentWillMount() {
     try {
       const signedIn = userIsLoggedIn()
 
-      let posts = []
+      let skills = []
       if (signedIn) {
           setAxiosDefaults()
-          posts = await this.getPosts()
+          skills = await this.getSkills()
+          console.log(skills)
       }
 
       this.setState({
-          posts,
+          skills,
           signedIn,
       })
       } catch(error) {
@@ -82,12 +84,27 @@ class App extends Component {
     }
   }
 
+  getSkills = async () =>{
+    try {
+      const response = await axios.get('/skills')
+      return response.data
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+  }
   render() {
 
     const SignUpLogInComponent = () =>(
       <SignUpLogin
         signUp={this.signUp}
         signIn={this.signIn}
+      />
+    )
+
+    const ProfilePageComponent = () =>(
+      <Profile
+        skills={this.state.skills}
       />
     )
     
@@ -97,6 +114,7 @@ class App extends Component {
             <button onClick={this.signOut}>Sign Out</button>
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
+                <Route exact path="/profilePage" render = {ProfilePageComponent}/>
               </Switch>
 
               {this.state.signedIn ?  <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
