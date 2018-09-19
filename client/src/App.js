@@ -91,7 +91,18 @@ class App extends Component {
     } catch(error) {
         console.log(error)
     }
-}
+  }
+
+  deletePost = async (postId) => {
+    try {
+        await axios.delete(`/posts/${postId}`)
+
+        const posts = await this.getPosts()
+        this.setState({posts})
+    } catch (error) {
+        console.log(error)
+    }
+  }
 
   render() {
 
@@ -104,7 +115,8 @@ class App extends Component {
 
     const PostsComponent = () => (
       <PostsList
-          posts={this.state.posts}/>
+          posts={this.state.posts}
+          deletePost={this.deletePost}/>
     )
     
     return (

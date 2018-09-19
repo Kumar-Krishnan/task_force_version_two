@@ -2,7 +2,7 @@ class PostsController < ApplicationController
     before_action :authenticate_user!
 
     def index 
-        @posts = current_user.posts
+        @posts = Post.all
 
         render json: @posts
     end
