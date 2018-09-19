@@ -10,13 +10,15 @@ User.destroy_all
 bob_loblaw = User.create!(
     email: 'bob_loblaw@lawblog.com',
     password: 'blahblah',
-    password_confirmation: 'blahblah'
+    password_confirmation: 'blahblah',
+    name: 'Bob Loblaw'
 )
 
 george_michael = User.create!(
     email: 'george.michael@bluth.com',
     password: 'blahblah',
-    password_confirmation: 'blahblah'
+    password_confirmation: 'blahblah',
+    name: 'George Michael'
 )
 
 # 3.times do

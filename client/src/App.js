@@ -8,6 +8,7 @@ import Profile from './components/profile/Profile';
 
 class App extends Component {
   state = {
+    userName: "",
     signedIn: false,
     skills: []
   }
@@ -17,22 +18,23 @@ class App extends Component {
       const signedIn = userIsLoggedIn()
 
       let skills = []
+      let userName = ""
       if (signedIn) {
           setAxiosDefaults()
           skills = await this.getSkills()
-          console.log(skills)
+          userName = await this.getUserName()
       }
 
       this.setState({
           skills,
           signedIn,
+          userName
       })
       } catch(error) {
           console.log(error)
       }
   }
   
-
 
   signUp = async (email,password, password_confirmation) => {
     try {
@@ -93,6 +95,16 @@ class App extends Component {
         return []
     }
   }
+
+  getUserName = async() =>{
+    try {
+      const response = await axios.get('/users/name')
+      return response.data
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+  }
   render() {
 
     const SignUpLogInComponent = () =>(
@@ -105,6 +117,7 @@ class App extends Component {
     const ProfilePageComponent = () =>(
       <Profile
         skills={this.state.skills}
+        userName={this.state.userName}
       />
     )
     
