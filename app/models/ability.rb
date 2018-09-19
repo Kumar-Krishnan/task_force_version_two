@@ -28,11 +28,6 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
-    user ||= User.new # guest user (not logged in)
-    can :read, Post
-
-    can [:destroy], Post do |post|
-      post.user == user
-    end
+    
   end
 end

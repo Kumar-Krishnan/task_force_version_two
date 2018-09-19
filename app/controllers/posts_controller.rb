@@ -1,51 +1,48 @@
-class PostsController < ApplicationController
-    before_action :authenticate_user!
-    load_and_authorize_resource  only: [:destroy]
+# class PostsController < ApplicationController
+#     before_action :authenticate_user!
 
+#     def index 
+#         @posts = Post.all
 
-    def index 
-        @posts = Post.all
+#         render json: @posts
+#     end
 
-        render json: @posts
-    end
+#     def show
+#         @post = Post.find(params[:id])
 
-    def show
-        @post = Post.find(params[:id])
+#         render json: @post
+#     end
 
-        render json: @post
-    end
-
-    def create
-        @user = current_user
-        @post = @user.posts.build(post_params)
+#     def create
+#         @user = current_user
+#         @post = @user.posts.build(post_params)
         
-        if @user.save
-            render json: @post, status: :created, location: @post
-        else
-            render json: @post.errors, status: :unprocessable_entity
-        end
-    end
+#         if @user.save
+#             render json: @post, status: :created, location: @post
+#         else
+#             render json: @post.errors, status: :unprocessable_entity
+#         end
+#     end
 
-    def update
-        @post = Post.find(params[:id])
+#     def update
+#         @post = Post.find(params[:id])
 
-        if @post.update(post_params)
-            render json: @post
-        else 
-            render json: @post.errors, status: :unprocessable_entity
-        end
-    end
+#         if @post.update(post_params)
+#             render json: @post
+#         else 
+#             render json: @post.errors, status: :unprocessable_entity
+#         end
+#     end
 
-    def destroy
-        @user = current_user
-        @post = Post.find(params[:id]).delete
+#     def destroy
+#         @post = Post.find(params[:id]).delete
 
-        render status: :ok
-    end
+#         render status: :ok
+#     end
 
-    private
+#     private
 
-    def post_params
-        params.require(:post).permit(:title, :content)
-    end
-end
+#     def post_params
+#         params.require(:post).permit(:title, :content)
+#     end
+# end

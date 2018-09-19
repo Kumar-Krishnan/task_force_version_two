@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 import SignUpLogin from './components/SignUpLogIn'
-import PostsList from './components/PostsList'
 import axios from 'axios'
 import {clearAuthTokens, saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
 
@@ -31,16 +30,6 @@ class App extends Component {
       }
   }
   
-
-  getPosts = async() =>{
-      try{
-          const response = await axios.get('/posts')
-          return response.data
-      } catch (error){
-          console.log(error)
-          return []
-      }
-  }
 
 
   signUp = async (email,password, password_confirmation) => {
@@ -93,17 +82,6 @@ class App extends Component {
     }
   }
 
-  deletePost = async (postId) => {
-    try {
-        await axios.delete(`/posts/${postId}`)
-
-        const posts = await this.getPosts()
-        this.setState({posts})
-    } catch (error) {
-        console.log(error)
-    }
-  }
-
   render() {
 
     const SignUpLogInComponent = () =>(
@@ -112,12 +90,6 @@ class App extends Component {
         signIn={this.signIn}
       />
     )
-
-    const PostsComponent = () => (
-      <PostsList
-          posts={this.state.posts}
-          deletePost={this.deletePost}/>
-    )
     
     return (
       <Router>
@@ -125,10 +97,9 @@ class App extends Component {
             <button onClick={this.signOut}>Sign Out</button>
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
-                <Route exact path="/posts" render={PostsComponent}/>
               </Switch>
 
-              {this.state.signedIn ?  <Redirect to="/posts"/> : <Redirect  to="/signUp"/>}
+              {this.state.signedIn ?  <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
           </div>
       </Router>
     );
