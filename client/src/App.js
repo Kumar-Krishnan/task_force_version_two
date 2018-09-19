@@ -3,7 +3,7 @@ import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom
 import SignUpLogin from './components/SignUpLogIn'
 import PostsList from './components/PostsList'
 import axios from 'axios'
-import {saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
+import {clearAuthTokens, saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
 
 
 class App extends Component {
@@ -79,6 +79,20 @@ class App extends Component {
     }
   }
 
+  signOut = async (event) => {
+    try {
+        event.preventDefault()
+        
+        await axios.delete('/auth/sign_out')
+
+        clearAuthTokens();
+
+        this.setState({signedIn: false})
+    } catch(error) {
+        console.log(error)
+    }
+}
+
   render() {
 
     const SignUpLogInComponent = () =>(
@@ -96,6 +110,7 @@ class App extends Component {
     return (
       <Router>
           <div>
+            <button onClick={this.signOut}>Sign Out</button>
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
                 <Route exact path="/posts" render={PostsComponent}/>
