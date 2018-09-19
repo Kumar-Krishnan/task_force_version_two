@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
     before_action :authenticate_user!
+    load_and_authorize_resource  only: [:destroy]
+
 
     def index 
         @posts = Post.all
@@ -35,6 +37,7 @@ class PostsController < ApplicationController
     end
 
     def destroy
+        @user = current_user
         @post = Post.find(params[:id]).delete
 
         render status: :ok

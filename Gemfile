@@ -46,6 +46,7 @@ gem 'omniauth'
 gem 'devise_token_auth'
 
 gem 'ffaker'
+gem 'cancancan'
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
