@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Skills from './Skills';
 
+
 class Profile extends Component {
     render() {
         if (this.props.userName === undefined || this.props.skills.length < 4){
@@ -14,6 +15,7 @@ class Profile extends Component {
         //         )
         //     }
         // }
+        
         return (
             <div>
                 <div>

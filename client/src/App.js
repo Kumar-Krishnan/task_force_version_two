@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
+import {Route, Link, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 import SignUpLogin from './components/SignUpLogIn'
 import axios from 'axios'
 import {clearAuthTokens, saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
@@ -10,7 +10,8 @@ class App extends Component {
   state = {
     userName: "",
     signedIn: false,
-    skills: []
+    skills: [],
+    pageVisiting: "profile"
   }
 
   async componentWillMount() {
@@ -105,6 +106,22 @@ class App extends Component {
         return []
     }
   }
+
+  SkillsNavigation = (props) =>{
+    const isSignedIn = this.state.signedIn
+    if (isSignedIn) {
+      return <button onClick={this.redirectToSkills}>Skills</button>
+    }
+    else{
+      return null
+    }
+  }
+
+  redirectToSkills = () =>{
+    this.setState({
+      pageVisiting: "skills"
+    })
+  }
   render() {
 
     const SignUpLogInComponent = () =>(
@@ -125,12 +142,14 @@ class App extends Component {
       <Router>
           <div>
             <button onClick={this.signOut}>Sign Out</button>
+            <this.SkillsNavigation/>
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
                 <Route exact path="/profilePage" render = {ProfilePageComponent}/>
               </Switch>
-
-              {this.state.signedIn ?  <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
+              {this.state.signedIn ? null: <Redirect  to="/signUp"/>}
+              {this.state.signedIn & this.state.pageVisiting === "profile" ? <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
+              {this.state.signedIn & this.state.pageVisiting === "skills" ? <Redirect to="/skillsPage"/> : <Redirect  to="/signUp"/>}
           </div>
       </Router>
     );
