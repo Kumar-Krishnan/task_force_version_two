@@ -25,11 +25,23 @@ class AllSkills extends Component {
     render() {
         return (
             <div>
-                {
-                    this.state.globalSkills.map((skill, i)=>{
-                        return <Skills skill={skill} key={i}/>
-                    })
-                }
+
+                <div>
+                    {
+                        this.props.userSkills.map((skill, i)=>{
+                            return <Skills skill={skill} key={i}/>
+                        })
+                    }
+                </div>
+
+                <div>
+                    {
+                        this.state.globalSkills.map((skill, i)=>{
+                            return <Skills globalSkillsTrue={true} skill={skill} key={i}/>
+                        })
+                    }
+                </div>
+                
             </div>
         );
     }

@@ -12,4 +12,11 @@ class SkillsController < ApplicationController
 
         render json: @skills
     end
+
+    def add_skill_to_user
+        skill = Skill.find(params[:id])
+        @user = current_user
+        @user.skills << skill
+        render json: "skill added"
+    end
 end

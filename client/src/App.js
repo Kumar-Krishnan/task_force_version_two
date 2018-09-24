@@ -91,7 +91,9 @@ class App extends Component {
   getSkills = async () =>{
     try {
       const response = await axios.get('/skills/user_skills')
-      return response.data
+      return response.data.sort(function(a,b){
+        return a.name> b.name
+      })
     } catch (error) {
         console.log(error)
         return []
@@ -118,9 +120,25 @@ class App extends Component {
     }
   }
 
+  ProfileNavigation = (props) =>{
+    const isSignedIn = this.state.signedIn
+    if (isSignedIn) {
+      return <button onClick={this.redirectToProfile}>Profile</button>
+    }
+    else{
+      return null
+    }
+  }
+
   redirectToSkills = () =>{
     this.setState({
       pageVisiting: "skills"
+    })
+  }
+
+  redirectToProfile = () =>{
+    this.setState({
+      pageVisiting: "profile"
     })
   }
   render() {
@@ -141,6 +159,7 @@ class App extends Component {
 
     const GlobalSkillsComponent = () =>(
       <AllSkills
+        userSkills = {this.state.userSkills}
       />
     )
     
@@ -149,14 +168,15 @@ class App extends Component {
           <div>
             <button onClick={this.signOut}>Sign Out</button>
             <this.SkillsNavigation/>
+            <this.ProfileNavigation/>
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
                 <Route exact path="/profilePage" render = {ProfilePageComponent}/>
                 <Route exact path="/skillsPage" render = {GlobalSkillsComponent}/>
               </Switch>
               {this.state.signedIn ? null: <Redirect  to="/signUp"/>}
-              {this.state.signedIn & this.state.pageVisiting === "profile" ? <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
-              {this.state.signedIn & this.state.pageVisiting === "skills" ? <Redirect to="/skillsPage"/> : <Redirect  to="/signUp"/>}
+              {this.state.signedIn & this.state.pageVisiting === "profile" ? <Redirect to="/profilePage"/> : null}
+              {this.state.signedIn & this.state.pageVisiting === "skills" ? <Redirect to="/skillsPage"/> : null}
           </div>
       </Router>
     );
