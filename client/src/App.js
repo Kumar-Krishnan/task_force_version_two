@@ -4,30 +4,31 @@ import SignUpLogin from './components/SignUpLogIn'
 import axios from 'axios'
 import {clearAuthTokens, saveAuthTokens, setAxiosDefaults, userIsLoggedIn} from "./util/SessionHeaderUtil";
 import Profile from './components/profile/Profile';
+import AllSkills from './components/skills/AllSkills';
 
 
 class App extends Component {
   state = {
     userName: "",
     signedIn: false,
-    skills: [],
-    pageVisiting: "profile"
+    userSkills: [],
+    pageVisiting: "profile",
   }
 
   async componentWillMount() {
     try {
       const signedIn = userIsLoggedIn()
 
-      let skills = []
+      let userSkills = []
       let userName = ""
       if (signedIn) {
           setAxiosDefaults()
-          skills = await this.getSkills()
+          userSkills = await this.getSkills()
           userName = await this.getUserName()
       }
 
       this.setState({
-          skills,
+          userSkills,
           signedIn,
           userName
       })
@@ -89,7 +90,7 @@ class App extends Component {
 
   getSkills = async () =>{
     try {
-      const response = await axios.get('/skills')
+      const response = await axios.get('/skills/user_skills')
       return response.data
     } catch (error) {
         console.log(error)
@@ -133,8 +134,13 @@ class App extends Component {
 
     const ProfilePageComponent = () =>(
       <Profile
-        skills={this.state.skills}
+        skills={this.state.userSkills}
         userName={this.state.userName}
+      />
+    )
+
+    const GlobalSkillsComponent = () =>(
+      <AllSkills
       />
     )
     
@@ -146,6 +152,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/signUp" render = {SignUpLogInComponent}/>
                 <Route exact path="/profilePage" render = {ProfilePageComponent}/>
+                <Route exact path="/skillsPage" render = {GlobalSkillsComponent}/>
               </Switch>
               {this.state.signedIn ? null: <Redirect  to="/signUp"/>}
               {this.state.signedIn & this.state.pageVisiting === "profile" ? <Redirect to="/profilePage"/> : <Redirect  to="/signUp"/>}
