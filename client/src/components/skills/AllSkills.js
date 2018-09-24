@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import Skills from '../profile/Skills';
 
 class AllSkills extends Component {
     state = {
@@ -13,13 +14,22 @@ class AllSkills extends Component {
     getGlobalSkills = async() =>{
        let globalSkills = []
        let response = await axios.get('/skills')
-       globalSkills = response.data
+       globalSkills = response.data.sort()
+       globalSkills = globalSkills.sort(function(a,b){
+           return a.name >b.name
+       })
+       console.log(globalSkills)
        this.setState({globalSkills})
     }
 
     render() {
         return (
             <div>
+                {
+                    this.state.globalSkills.map((skill, i)=>{
+                        return <Skills skill={skill} key={i}/>
+                    })
+                }
             </div>
         );
     }
