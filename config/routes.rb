@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get '/users/name', to: 'users#get_name'
   get '/skills/user_skills', to: 'skills#user_skills_index'
   post '/skills/:id/add_skill_to_user', to: 'skills#add_skill_to_user'
+  delete '/skills/:id/remove_skill_from_user', to: 'skills#remove_skill_from_user'
   resources :skills
   resources :users
 end

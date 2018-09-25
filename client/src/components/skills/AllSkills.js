@@ -29,7 +29,7 @@ class AllSkills extends Component {
                 <div>
                     {
                         this.props.userSkills.map((skill, i)=>{
-                            return <Skills skill={skill} key={i}/>
+                            return <Skills subtractionPossible={true} skill={skill} key={i}/>
                         })
                     }
                 </div>

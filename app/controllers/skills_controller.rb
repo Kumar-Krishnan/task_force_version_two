@@ -24,4 +24,15 @@ class SkillsController < ApplicationController
         end
         
     end
+
+    def remove_skill_from_user
+        skill = Skill.find(params[:id])
+        @user = current_user
+        if @user.skills.include?(skill)
+            @user.skills.delete(skill)
+            render json: "skill removed"
+        else
+            render json: "skill not found"
+        end
+    end
 end
