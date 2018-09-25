@@ -16,7 +16,12 @@ class SkillsController < ApplicationController
     def add_skill_to_user
         skill = Skill.find(params[:id])
         @user = current_user
-        @user.skills << skill
-        render json: "skill added"
+        if @user.skills.include?(skill)
+            render json: "skill NOT ADDED"
+        else
+            @user.skills << skill
+            render json: "skill added"
+        end
+        
     end
 end
